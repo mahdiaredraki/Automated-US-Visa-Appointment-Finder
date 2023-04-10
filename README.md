@@ -10,9 +10,9 @@ I hope this bot can help you find an appointment!
 
 ### To run the program
 - Supported browser: Google Chrome
-- Supporter Operating Systems: Windows, and MacOS
-- To run the application, you need to download chromedrive.
-Download chromedrive:
+- Supported Operating Systems: Windows, and MacOS
+- To run the application, you need to download chromedriver.
+Download chromedriver:
 https://chromedriver.chromium.org/downloads
 - Extract the chromdriver file and paste it into the same folder as this repository.
 - It is important that "US_Visa_Appointment_Bot.exe" and "chromedriver.exe" are in the same folder.
