@@ -14,10 +14,10 @@ I hope this bot can help you find an appointment!
 - To run the application, you need to download chromedriver.
 Download chromedriver:
 https://chromedriver.chromium.org/downloads
-- Extract the chromdriver file and paste it into the same folder as this repository.
+- Extract the chromedriver file and paste it into the same folder as this repository.
 - It is important that "US_Visa_Appointment_Bot.exe" and "chromedriver.exe" are in the same folder.
 - Double click on "US_Visa_Appointment_Bot.exe" and follow the prompts on the screen
-- Your email and password are only stored temporarily on your computer. This information is destroyed once your close the program.
+- Your email and password are only stored temporarily on your computer. This information is destroyed once you close the program.
 
 
 #### Advanced (read below if you know how to program in Python and want to modify the underlying source code.)
