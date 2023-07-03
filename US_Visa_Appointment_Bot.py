@@ -55,6 +55,24 @@ def logout_to_website(driver):
 	driver.get(Logout_link)
 	time.sleep(1)
 
+def group_applicants(driver):
+	All_applicants = driver.find_elements_by_xpath("//input[@type='checkbox']")
+
+	applicant1 = All_applicants[0]
+	applicant2 = All_applicants[1]
+	applicant3 = All_applicants[2]
+	if Choose_applicant_1 != '1':
+		ActionChains(driver).click(applicant1).perform()
+	if Choose_applicant_2 != '2':
+		ActionChains(driver).click(applicant2).perform()
+	if Choose_applicant_3 != '3':
+		ActionChains(driver).click(applicant3).perform()	
+	
+	# Click Continue
+	continue_button = driver.find_element_by_name('commit')
+	continue_button.click()
+
+
 def found_appointment(driver):
 	## Script below is run when an appointment is found
 	# Open the calendar box
@@ -69,13 +87,16 @@ def found_appointment(driver):
 		current_year_element = driver.find_element_by_class_name("ui-datepicker-year")
 		current_year = int(current_year_element.get_attribute('innerHTML'))
 
-		if current_year == 2024:
-			break
+		current_month_element_left = driver.find_elements_by_class_name("ui-datepicker-month")[0]
+		current_month_left = current_month_element_left.get_attribute('innerHTML')
+
+		time.sleep(1)
+		if current_year == (int(driver.Year_up_to)):
+			if current_month_left == driver.Month_up_to:
+				break
 
 		Date_Available_List = driver.find_elements_by_css_selector("a[class='ui-state-default']")
 		if not Date_Available_List: # 1. Check left and right boxes if date is available
-			Right_button_calendar = driver.find_element_by_css_selector("span[class='ui-icon ui-icon-circle-triangle-e']")
-			Right_button_calendar.click()
 			Right_button_calendar = driver.find_element_by_css_selector("span[class='ui-icon ui-icon-circle-triangle-e']")
 			Right_button_calendar.click()
 		else:
@@ -144,9 +165,11 @@ def run_bot(driver):
 				time.sleep(pause_between_commands)
 				Schedule_Appointment_button = driver.find_elements_by_link_text("Reschedule Appointment")[1]
 				Schedule_Appointment_button.click()
-					
+				
+				# group_applicants(driver)
+
 				select = Select(driver.find_element_by_id("appointments_consulate_appointment_facility_id"))
-				select.select_by_value('50')
+				select.select_by_value(driver.city_code)
 
 				time.sleep(2)
 				element = driver.find_element_by_id("consulate_date_time")
@@ -182,22 +205,61 @@ if __name__ == "__main__":
 		"3" : 	"tr",
 		"4" : 	"ca",
 	}
+
+	Canada_City_Code = {
+		"1" : 	'89',
+		"2" : 	'90',
+		"3" : 	'91',
+		"4" : 	'92',
+		"5" : 	'93',
+		"6" : 	'94',
+		"7" : 	'95',
+	}
+
+	UAE_City_Code = {
+		"1" : 	'49',
+		"2" : 	'50',
+	}
+
 	Selected_country_code = input(	  "UAE = 1 \n"
 									+ "Armenia = 2 \n"
 									+ "Turkey = 3 \n"
 									+ "Canada = 4 \n"
 									+ "Type the number for your country and press Enter:\n")
 	
+	# UAE Cities
+	if Selected_country_code == '1':
+		Selected_city_code = input(	  	"Abu Dhabi = 1 \n"
+										+ "Dubai = 2 \n"
+										+ "Type the number for your city and press Enter:\n")
+		Selected_city_code = UAE_City_Code[Selected_city_code]
+		
+	# Canadian Cities
+	if Selected_country_code == '4':
+		Selected_city_code = input(	  	"Calgary = 1 \n"
+										+ "Halifax = 2 \n"
+										+ "Montreal = 3 \n"
+										+ "Ottawa = 4 \n"
+										+ "Quebec City = 5 \n"
+										+ "Toronto = 6 \n"
+										+ "Vancouver = 7 \n"
+										+ "Type the number for your city and press Enter:\n")
+		Selected_city_code = Canada_City_Code[Selected_city_code]
+
+					
 	email_address = input("Enter your login email address and press Enter:\n")
 	password = input("Enter your login password and press Enter:\n")
 
-	
+	driver.Year_up_to = input("Enter the year up to which you want the algorithm to search for appointments and press Enter: (e.g. 2024)\n")
+	driver.Month_up_to = input("Enter the Month up to which you want the algorithm to search for appointments and press Enter: (e.g. March)\n")
 	driver.maximize_window()
 
 	while True:
 		driver.password = password
 		driver.email_address = email_address
 		driver.country_code = Embassy_Country_Code[Selected_country_code]
+		driver.city_code = Selected_city_code
+		
 		login_to_website(driver)
 
 		run_bot(driver)
